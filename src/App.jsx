@@ -2,6 +2,9 @@ import { useState } from "react";
 import "./App.css";
 
 import Statistics from "./components/Statistics/Statistics";
+import FeedbackOptions from "./components/FeedbackOptions/FeedbackOptions";
+import Section from "./components/Section/Section";
+import Notification from "./components/Notification/Notification";
 
 function App() {
   const [good, setGood] = useState(0);
@@ -36,25 +39,32 @@ function App() {
 
   return (
     <div>
-      <div>
-        <button onClick={handleGoodFeedback} type="button">
-          Good
-        </button>
-        <button onClick={handleNeutralFeedback} type="button">
-          Neutral
-        </button>
-        <button onClick={handleBadFeedback} type="button">
-          Bad
-        </button>
-      </div>
+      <Section title="Please leave feedback">
+        <FeedbackOptions
+          options={["good", "neutral", "bad"]}
+          onLeaveFeedback={{
+            good: handleGoodFeedback,
+            neutral: handleNeutralFeedback,
+            bad: handleBadFeedback,
+          }}
+        />
+      </Section>
 
-      <Statistics
-        good={good}
-        neutral={neutral}
-        bad={bad}
-        total={countTotalFeedback()}
-        positivePercentage={countPositiveFeedbackPercentage()}
-      />
+      <Section title="Statistics">
+
+          {countTotalFeedback() === 0 ? (
+            <Notification message="There is no feedback"/>
+          ) : (
+
+        <Statistics
+          good={good}
+          neutral={neutral}
+          bad={bad}
+          total={countTotalFeedback()}
+          positivePercentage={countPositiveFeedbackPercentage()}
+        />)
+        }
+      </Section>
     </div>
   );
 }
